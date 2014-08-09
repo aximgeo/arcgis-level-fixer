@@ -7,6 +7,12 @@
 
 ArcGIS map services do not require all "zoom levels" to be published. This messes up the zoom level index for other applications, which always starts at 0. This project intends to make it a little smarter.
 
+This application does the following:
+
+1. Looks up the ArcGIS MapServer's LOD configuration
+2. Compares the zoom level resolutions to the [OSM zoom levels](http://wiki.openstreetmap.org/wiki/Zoom_levels) 
+3. Redirects the request with a 302 status code to the ArcGIS MapServer
+
 
 Demo Access
 -----------
