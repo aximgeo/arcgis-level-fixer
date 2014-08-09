@@ -1,7 +1,6 @@
 ![](http://img2.wikia.nocookie.net/__cb20110128060130/alf/images/9/92/Cat_sandwich.jpg)
 # ALF
-## **ArcGIS** zoom **Level** **Fixer**
-### Eats Cats And Zoom Levels
+ **ArcGIS** zoom **Level** **Fixer** - Eats Cats And Zoom Levels
 
 
 ---
