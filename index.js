@@ -18,11 +18,6 @@ var allowCrossDomain = function(req, res, next) {
 httpApp.use(allowCrossDomain);                  //allow CORS requests
 routes.setup(httpApp);
 
-//General error handling
-httpApp.use(function(err, req, res, next){
-    res.json(400, {"message":"Bad or invalid request, this may occur from improperly formatted input.", "code": 400});
-});
-
 //CREATE SERVER HTTP
 http.createServer(httpApp).listen(config.http.port);
 console.log("http  is listening on port", config.http.port);
@@ -33,11 +28,6 @@ if(config.https != null) {
     //MIDDLEWARE
     httpsApp.use(allowCrossDomain);                  //allow CORS requests
     routes.setup(httpsApp);
-
-    //General error handling
-    httpsApp.use(function(err, req, res, next){
-        res.json(400, {"message":"Bad or invalid request, this may occur from improperly formatted input.", "code": 400});
-    });
 
     //SSL MANAGEMENT
     var sslOptions = {},
