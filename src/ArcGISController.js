@@ -2,7 +2,33 @@ var ZoomLevelMapper = require('./ZoomLevelMapper.js').ZoomLevelMapper;
 
 exports.ArcGISController = function() {
     "use strict";
+
+    this.LODCache = {};
+
+    var self = this;
+    setInterval(function clearOldCacheItems() {
+        for(var cacheKey in self.LODCache) {
+            var cacheItem = self.LODCache[cacheKey];
+            if(cacheItem == null || cacheItem.lastTouch < Date.now() - 300000) {
+                delete self.LODCache[cacheKey];
+            }
+        }
+    }, 60000);
 };
+
+exports.ArcGISController.prototype.getZoomLevelMapper = function (url, callback) {
+    if(this.LODCache[url] == null) {
+        var zoomLevelMapper = new ZoomLevelMapper(url);
+        zoomLevelMapper.init(function(err) {
+            if(err) {
+                return callback(err);
+            }
+            return callback(undefined, zoomLevelMapper);
+        });
+    } else {
+        return callback(undefined, this.LODCache[url]);
+    }
+}
 
 exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
     "use strict";
@@ -22,8 +48,7 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
         return;
     }
 
-    var zoomLevelMapper = new ZoomLevelMapper(url);
-    zoomLevelMapper.init(function(err) {
+    this.getZoomLevelMapper(url, function(err, zoomLevelMapper) {
         if(err) {
             res.status(500).send(err.message);
             return;
