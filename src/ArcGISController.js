@@ -1,3 +1,5 @@
+var ZoomLevelMapper = require('./ZoomLevelMapper.js').ZoomLevelMapper;
+
 exports.ArcGISController = function() {
     "use strict";
 };
@@ -20,8 +22,16 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
         return;
     }
 
-    var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
-    res.redirect(redirectUrl);
+    var zoomLevelMapper = new ZoomLevelMapper(url);
+    zoomLevelMapper.init(function(err) {
+        if(err) {
+            res.status(500).send(err.message);
+            return;
+        }
+
+        var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
+        res.redirect(redirectUrl);
+    });
 };
 
 function isInt(n) {
