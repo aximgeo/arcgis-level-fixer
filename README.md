@@ -19,5 +19,5 @@ Usage
 If you want to load an ArcGIS url like this:
 http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer/{z}/{y}/{x}
 
-Into a map viewer that is expecting typical OSM zoom levels, you can instead use this url:
+Into a map viewer that is expecting typical [OSM zoom levels](http://wiki.openstreetmap.org/wiki/Zoom_levels), you can instead use this url:
 http://arcgis-level-fixer.elasticbeanstalk.com/gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer/arcgis/z/{z}/y/{y}/x/{x}
