@@ -8,17 +8,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/cbupp/arcgis-on-mapbox.git"
+    "url": "git@github.com:cbupp/arcgis-level-fixer.git"
   },
   "keywords": [
     "agol",
     "mapbox",
     "proxy"
   ],
-  "author": "cbupp",
+  "author": "GIS, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cbupp/arcgis-on-mapbox/issues"
+    "url": "https://github.com/cbupp/arcgis-level-fixer/issues"
   },
-  "homepage": "https://github.com/cbupp/arcgis-on-mapbox"
+  "homepage": "https://github.com/cbupp/arcgis-level-fixer",
+  "dependencies": {
+    "express": "^4.8.2"
+  }
 }
