@@ -20,8 +20,7 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
         return;
     }
 
-    var redirectUrl = "http://" + url + "/tile/"+z+"/"+y+"/"+x;
-    console.log(redirectUrl);
+    var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
     res.redirect(redirectUrl);
 };
 
