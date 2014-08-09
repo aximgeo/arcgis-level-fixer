@@ -1,14 +1,16 @@
-var http = require('http');
+var http = require('http'),
+    correctResolutions = require('../config.json').correctResolutions;
 
 exports.ZoomLevelMapper = function(url) {
     "use strict";
 
     this.url = url;
+    this.lodMapper = {};
 };
 
 exports.ZoomLevelMapper.prototype.init = function (callback) {
     "use strict";
-
+    var self = this;
     this.getArcGISConfiguration(function(err, data) {
         if(err) {
             return callback(err);
@@ -18,16 +20,33 @@ exports.ZoomLevelMapper.prototype.init = function (callback) {
             return callback(new Error("LODs not defined for MapServer"));
         } else {
             //create the zoom level data
-            console.log(data.tileInfo.lods);
-            return callback(undefined, data);
+            var arcgisLODs = data.tileInfo.lods;
+
+            for(var i = 0; i < arcgisLODs.length; i++) {
+                var arcgisLOD = arcgisLODs[i];
+                for(var ci in correctResolutions) {
+                    var correctRes = correctResolutions[ci];
+
+                    if(self.withinPercentage(arcgisLOD.resolution, correctRes,.1)) {
+                        self.lodMapper[ci] = arcgisLOD.level;
+                        break;
+                    }
+                }
+            }
+
+            return callback(undefined);
         }
     });
 };
 
+exports.ZoomLevelMapper.prototype.withinPercentage = function (a, b, percentage) {
+    var diff = Math.abs((a/b) - 1);
+    return diff < percentage;
+}
+
 exports.ZoomLevelMapper.prototype.getArcGISConfiguration = function (callback) {
     "use strict";
     var configUrl = 'http://' + this.url + '?f=pjson';
-    console.log(configUrl);
     http.get(configUrl, function(res) {
         var body = '';
 
@@ -40,7 +59,7 @@ exports.ZoomLevelMapper.prototype.getArcGISConfiguration = function (callback) {
             try {
                 json = JSON.parse(body);
             } catch (e) {
-                console.log(e);
+                return callback(e);
             }
             return callback(undefined, json);
         });
@@ -51,5 +70,5 @@ exports.ZoomLevelMapper.prototype.getArcGISConfiguration = function (callback) {
 
 exports.ZoomLevelMapper.prototype.getCorrectZoomLevel = function (z) {
     "use strict";
-
+    return this.lodMapper[z];
 };

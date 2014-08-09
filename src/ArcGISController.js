@@ -29,6 +29,13 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
             return;
         }
 
+        z = zoomLevelMapper.getCorrectZoomLevel(z);
+
+        if(z == null) {
+            res.status(404).send("The requested LOD is not defined");
+            return;
+        }
+
         var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
         res.redirect(redirectUrl);
     });
