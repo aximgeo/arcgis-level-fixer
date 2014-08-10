@@ -20,6 +20,12 @@
     </div>
 
     <script>
+        $("#inputtext").keyup(function(e){
+            if(e.keyCode == 13)
+            {
+                $("#submit").click();
+            }
+        });
         $("#submit").click(function()
         {
             var dataString = $("#inputtext").val();
