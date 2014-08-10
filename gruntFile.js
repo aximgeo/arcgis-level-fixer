@@ -113,7 +113,7 @@ module.exports = function(grunt) {
                     beautify: true
                 },
                 files: {
-                    '<%= build %>/app.js': ['index.js']
+                    '<%= build %>/app.js': ['index.js'],
                 }
             },
             source: {
@@ -138,14 +138,9 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd:'certs'
             },
-            privateDependencies: {
-                files: [
-                    {expand: true, src: ['node_modules/AWS-Batch-Handlers/**'], dest: '<%= build %>/'},
-                     {expand: true, src: ['node_modules/CloudTrax-SDK/**'], dest: '<%= build %>/'},
-                     {expand: true, src: ['node_modules/LockCache/**'], dest: '<%= build %>/'},
-                     {expand: true, src: ['node_modules/MacAddress/**'], dest: '<%= build %>/'},
-                     {expand: true, src: ['node_modules/Period/**'], dest: '<%= build %>/'}
-                ]
+            html: {
+                src : 'index.html',
+                dest: '<%= build %>/index.html'
             },
             config: {
                 src : 'config.json',
