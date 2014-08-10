@@ -37,7 +37,9 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        this.getZoomLevelMapper(query.url, function(err, zoomLevelMapper) {
+        var test_url_parts = url.parse(query.url, true);
+        var test_url = (test_url_parts.host || "") + test_url_parts.pathname;
+        this.getZoomLevelMapper(test_url, function(err, zoomLevelMapper) {
             if(err) {
                 res.status(500).send("this doesn't taste like a cat.");
                 console.log(err);
@@ -45,7 +47,7 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
             }
 
             var results = {
-                "alf":req.protocol + "://" + req.headers.host + "/" + query.url + "/arcgis/z/{z}/y/{y}/x/{x}",
+                "alf":req.protocol + "://" + req.headers.host + "/" + test_url + "/arcgis/z/{z}/y/{y}/x/{x}",
                 "lods":zoomLevelMapper.getValidLODs()
             };
 
