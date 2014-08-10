@@ -1,7 +1,7 @@
 var http = require('http'),
     config = require('../config.json'),
     correctResolutions = config.correctResolutions,
-    allowedResolutionError = config.correctResolutions;
+    allowedResolutionError = config.allowedResolutionError;
 
 exports.ZoomLevelMapper = function(url) {
     "use strict";
