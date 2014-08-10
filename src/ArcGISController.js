@@ -1,4 +1,5 @@
-var ZoomLevelMapper = require('./ZoomLevelMapper.js').ZoomLevelMapper;
+var ZoomLevelMapper = require('./ZoomLevelMapper.js').ZoomLevelMapper,
+    url = require('url');
 
 exports.ArcGISController = function() {
     "use strict";
@@ -30,8 +31,33 @@ exports.ArcGISController.prototype.getZoomLevelMapper = function (url, callback)
         return callback(undefined, this.LODCache[url]);
     }
 };
-
 exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
+    "use strict";
+    try {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
+        this.getZoomLevelMapper(query.url, function(err, zoomLevelMapper) {
+            if(err) {
+                res.status(500).send("this doesn't taste like a cat.");
+                console.log(err);
+                return;
+            }
+
+            var results = {
+                "alf":req.protocol + "://" + req.headers.host + "/" + query.url + "/arcgis/z/{z}/y/{y}/x/{x}",
+                "lods":zoomLevelMapper.getValidLODs()
+            };
+
+            res.json(results);
+        });
+    } catch (ex) {
+        console.log(ex);
+        res.status(500).send("this doesn't taste like a cat.");
+    }
+};
+
+exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
     "use strict";
 
     try {

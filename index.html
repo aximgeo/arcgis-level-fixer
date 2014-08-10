@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ALF - I accept cats as payment</title>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+        $.get( "ajax/test.html", function( data ) {
+            $( ".result" ).html( data );
+            alert( "Load was performed." );
+        });
+    </script>
+</head>
+<body>
+    <div class="float">
+        <form action="">
+            <h1>Where is your ArcGIS MapServer?</h1>
+            <input type="text" name="fname">
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

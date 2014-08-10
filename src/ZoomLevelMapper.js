@@ -41,6 +41,10 @@ exports.ZoomLevelMapper.prototype.init = function (callback) {
     });
 };
 
+exports.ZoomLevelMapper.prototype.getValidLODs = function () {
+    return this.lodMapper;
+};
+
 exports.ZoomLevelMapper.prototype.withinPercentage = function (a, b, percentage) {
     "use strict";
     var diff = Math.abs((a/b) - 1);
