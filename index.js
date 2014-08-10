@@ -9,11 +9,12 @@ var express = require('express'),
 
 //CORS
 var allowCrossDomain = function(req, res, next) {
+    "use strict";
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'content-type, authorization, content-length, x-requested-with');
     next();
-}
+};
 
 httpApp.use(allowCrossDomain);                  //allow CORS requests
 routes.setup(httpApp);
@@ -22,6 +23,7 @@ httpApp.set('port', process.env.PORT || config.http.port);
 
 //CREATE SERVER HTTP
 http.createServer(httpApp).listen(httpApp.get('port'), function(){
+    "use strict";
     console.log("http  is listening on port", httpApp.get('port'));
 });
 
@@ -54,6 +56,7 @@ if(config.https != null) {
 
     //CREATE SERVER HTTPS
     https.createServer(sslOptions, httpsApp).listen(config.https.port, function(){
+        "use strict";
         console.log("http  is listening on port", config.https.port);
     });
 }

@@ -42,9 +42,10 @@ exports.ZoomLevelMapper.prototype.init = function (callback) {
 };
 
 exports.ZoomLevelMapper.prototype.withinPercentage = function (a, b, percentage) {
+    "use strict";
     var diff = Math.abs((a/b) - 1);
     return diff < percentage;
-}
+};
 
 exports.ZoomLevelMapper.prototype.getArcGISConfiguration = function (callback) {
     "use strict";

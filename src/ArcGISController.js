@@ -17,6 +17,7 @@ exports.ArcGISController = function() {
 };
 
 exports.ArcGISController.prototype.getZoomLevelMapper = function (url, callback) {
+    "use strict";
     if(this.LODCache[url] == null) {
         var zoomLevelMapper = new ZoomLevelMapper(url);
         zoomLevelMapper.init(function(err) {
@@ -28,7 +29,7 @@ exports.ArcGISController.prototype.getZoomLevelMapper = function (url, callback)
     } else {
         return callback(undefined, this.LODCache[url]);
     }
-}
+};
 
 exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
     "use strict";
@@ -74,5 +75,6 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
 };
 
 function isInt(n) {
+    "use strict";
     return n % 1 === 0;
 }
