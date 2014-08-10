@@ -42,6 +42,7 @@ exports.ZoomLevelMapper.prototype.init = function (callback) {
 };
 
 exports.ZoomLevelMapper.prototype.getValidLODs = function () {
+    "use strict";
     return this.lodMapper;
 };
 
