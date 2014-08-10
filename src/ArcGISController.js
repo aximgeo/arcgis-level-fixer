@@ -33,37 +33,44 @@ exports.ArcGISController.prototype.getZoomLevelMapper = function (url, callback)
 exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
     "use strict";
 
-    var parseUrl = /[/]?(.*(?=[\/]arcgis[\/]?))/i,
-        parseZ = /z\/([0-9]+)/i,
-        parseY = /y\/([0-9]+)/i,
-        parseX = /x\/([0-9]+)/i;
+    try {
+        console.log(req.url);
 
-    var url = req.url.match(parseUrl)[1],
-        z = req.url.match(parseZ)[1],
-        y = req.url.match(parseY)[1],
-        x = req.url.match(parseX)[1];
+        var parseUrl = /[/]?(.*(?=[\/]arcgis[\/]?))/i,
+            parseZ = /z\/([0-9]+)/i,
+            parseY = /y\/([0-9]+)/i,
+            parseX = /x\/([0-9]+)/i;
 
-    if(!isInt(z) || !isInt(x) || !isInt(y)) {
-        res.status(500).send("X/Y/Z need to be integers");
-        return;
+        var url = req.url.match(parseUrl)[1],
+            z = req.url.match(parseZ)[1],
+            y = req.url.match(parseY)[1],
+            x = req.url.match(parseX)[1];
+
+        if(!isInt(z) || !isInt(x) || !isInt(y)) {
+            res.status(500).send("X/Y/Z need to be integers");
+            return;
+        }
+
+        this.getZoomLevelMapper(url, function(err, zoomLevelMapper) {
+            if(err) {
+                res.status(500).send(err.message);
+                return;
+            }
+
+            z = zoomLevelMapper.getCorrectZoomLevel(z);
+
+            if(z == null) {
+                res.status(404).send("The requested LOD is not defined");
+                return;
+            }
+
+            var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
+            res.redirect(redirectUrl);
+        });
+    } catch (ex) {
+        console.log(ex);
+        res.status(500).send("Bad request");
     }
-
-    this.getZoomLevelMapper(url, function(err, zoomLevelMapper) {
-        if(err) {
-            res.status(500).send(err.message);
-            return;
-        }
-
-        z = zoomLevelMapper.getCorrectZoomLevel(z);
-
-        if(z == null) {
-            res.status(404).send("The requested LOD is not defined");
-            return;
-        }
-
-        var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
-        res.redirect(redirectUrl);
-    });
 };
 
 function isInt(n) {
