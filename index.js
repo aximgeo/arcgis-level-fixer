@@ -18,9 +18,12 @@ var allowCrossDomain = function(req, res, next) {
 httpApp.use(allowCrossDomain);                  //allow CORS requests
 routes.setup(httpApp);
 
+httpApp.set('port', process.env.PORT || config.http.port);
+
 //CREATE SERVER HTTP
-http.createServer(httpApp).listen(config.http.port);
-console.log("http  is listening on port", config.http.port);
+http.createServer(httpApp).listen(httpApp.get('port'), function(){
+    console.log("http  is listening on port", httpApp.get('port'));
+});
 
 
 if(config.https != null) {
@@ -50,6 +53,7 @@ if(config.https != null) {
     }
 
     //CREATE SERVER HTTPS
-    https.createServer(sslOptions, httpsApp).listen(config.https.port);
-    console.log("https is listening on port", config.https.port);
+    https.createServer(sslOptions, httpsApp).listen(config.https.port, function(){
+        console.log("http  is listening on port", config.https.port);
+    });
 }
