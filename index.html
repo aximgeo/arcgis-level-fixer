@@ -8,8 +8,12 @@
     <div style="text-align: center">
         <img src="http://img2.wikia.nocookie.net/__cb20110128060130/alf/images/9/92/Cat_sandwich.jpg"/>
         <br>
-        <input style="width:100%; text-align: center" type="text" id="inputtext"><input type="button" value="submit "id="submit">
         <br>
+        <h2>Where is the MapServer?</h2>
+        <input style="width:80%; text-align: center" type="text" id="inputtext">
+        <br>
+        <input type="button" value="submit "id="submit">
+        <br><br><br>
         <div id="response">
         </div>
     </div>
@@ -24,6 +28,28 @@
                 url: "/examine?url=" + dataString,
                 success: function(result){
                     $("#response").html(result);
+                    var html = "";
+
+                    if(result.lods["0"] === 0) {
+                        html += "<h1>It's already a good URL!</h1><br><i>it should work as a basemap</i>";
+                    } else {
+                        html += "<b>Use this url for your basemap:</b><br><a href=''" + result.alf + "'>" + result.alf + "</a>";
+                    }
+
+                    html += "<br><br><b>Zoom Levels:</b><br>";
+
+                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>OSM LOD</th><th>Original LOD</th></tr>";
+
+                    for(var lodOSM in result.lods) {
+                        html += "<tr><td>"+lodOSM+"</td><td>"+result.lods[lodOSM]+"</td></tr>";
+                    }
+
+                    html += "</table>";
+
+                    $("#response").html(html);
+                },
+                error: function(result) {
+                    $("#response").html("<b>this doesn't taste like a cat</b><br><br>it should look like this:<br><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a>");
                 }
             });
         });
