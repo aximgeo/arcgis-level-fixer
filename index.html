@@ -3,20 +3,30 @@
 <head>
     <title>ALF - I accept cats as payment</title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script>
-        $.get( "ajax/test.html", function( data ) {
-            $( ".result" ).html( data );
-            alert( "Load was performed." );
-        });
-    </script>
 </head>
 <body>
-    <div class="float">
-        <form action="">
-            <h1>Where is your ArcGIS MapServer?</h1>
-            <input type="text" name="fname">
-            <input type="submit" value="Submit">
-        </form>
+    <div style="text-align: center">
+        <img src="http://img2.wikia.nocookie.net/__cb20110128060130/alf/images/9/92/Cat_sandwich.jpg"/>
+        <br>
+        <input style="width:100%; text-align: center" type="text" id="inputtext"><input type="button" value="submit "id="submit">
+        <br>
+        <div id="response">
+        </div>
     </div>
+
+    <script>
+        $("#submit").click(function()
+        {
+            var dataString = $("#inputtext").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/examine?url=" + dataString,
+                success: function(result){
+                    $("#response").html(result);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
