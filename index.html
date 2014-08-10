@@ -13,13 +13,21 @@
         <b>Where is the MapServer?</b><br>
         <input style="width:80%; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
         <br>
-        <input type="button" value="submit "id="submit">
+        <input type="button" value="submit "id="submit"><img id="spinner" style="display:none" src="/ajax-loader.gif"/>
         <br><br><br>
         <div id="response">
         </div>
     </div>
 
     <script>
+        function startLoading() {
+            $("#submit").hide();
+            $("#spinner").show();
+        }
+        function stopLoading() {
+            $("#submit").show();
+            $("#spinner").hide();
+        }
         $("#inputtext").keyup(function(e){
             if(e.keyCode == 13)
             {
@@ -28,6 +36,7 @@
         });
         $("#submit").click(function()
         {
+            startLoading();
             var dataString = $("#inputtext").val();
 
             $.ajax({
@@ -54,9 +63,11 @@
                     html += "</table>";
 
                     $("#response").html(html);
+                    stopLoading();
                 },
                 error: function(result) {
                     $("#response").html("<b>this doesn't taste like a cat</b><br><br>it should look like this:<br><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a>");
+                    stopLoading();
                 }
             });
         });

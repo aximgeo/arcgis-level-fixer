@@ -17,6 +17,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 httpApp.use(allowCrossDomain);                  //allow CORS requests
+httpApp.use(express.static(__dirname +'/images'));
 routes.setup(httpApp);
 
 httpApp.set('port', process.env.PORT || config.http.port);
