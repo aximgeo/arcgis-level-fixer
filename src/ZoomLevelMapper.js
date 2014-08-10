@@ -1,5 +1,7 @@
 var http = require('http'),
-    correctResolutions = require('../config.json').correctResolutions;
+    config = require('../config.json'),
+    correctResolutions = config.correctResolutions,
+    allowedResolutionError = config.correctResolutions;
 
 exports.ZoomLevelMapper = function(url) {
     "use strict";
@@ -27,7 +29,7 @@ exports.ZoomLevelMapper.prototype.init = function (callback) {
                 for(var ci in correctResolutions) {
                     var correctRes = correctResolutions[ci];
 
-                    if(self.withinPercentage(arcgisLOD.resolution, correctRes,.1)) {
+                    if(self.withinPercentage(arcgisLOD.resolution, correctRes, allowedResolutionError)) {
                         self.lodMapper[ci] = arcgisLOD.level;
                         break;
                     }

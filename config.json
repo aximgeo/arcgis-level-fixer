@@ -2,6 +2,7 @@
     "http": {
         "port":4433
     },
+    "allowedResolutionError":0.1,
     "correctResolutions":{
         "0":156543.03392799999,
         "1":78271.516963999893,
