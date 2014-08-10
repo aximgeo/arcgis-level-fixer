@@ -52,12 +52,12 @@
                         html += "<b>Use this url for your basemap:</b><br><a href=''" + result.alf + "'>" + result.alf + "</a>";
                     }
 
-                    html += "<br><br><b>Zoom Levels:</b><br>";
+                    html += "<br><br>";
 
-                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>OSM LOD</th><th>Original LOD</th></tr>";
+                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>OSM LOD</th></tr>";
 
                     for(var lodOSM in result.lods) {
-                        html += "<tr><td>"+lodOSM+"</td><td>"+result.lods[lodOSM]+"</td></tr>";
+                        html += "<tr><td>"+result.lods[lodOSM]+"</td><td>now maps to</td><td>"+lodOSM+"</td></tr>";
                     }
 
                     html += "</table>";
