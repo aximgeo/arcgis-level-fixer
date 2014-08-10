@@ -138,6 +138,12 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd:'certs'
             },
+            images: {
+                src : '**',
+                dest: '<%= build %>/images/',
+                expand: true,
+                cwd:'images'
+            },
             html: {
                 src : 'index.html',
                 dest: '<%= build %>/index.html'
