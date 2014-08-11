@@ -17,7 +17,7 @@ This application does the following:
 To use:
 -----------
 
-1. visit: http://arcgis-level-fixer.elasticbeanstalk.com/
+1. visit: http://gisinc.github.io/arcgis-level-fixer/
 2. Create a proxy/redirect url
 3. Use the new url!
  
