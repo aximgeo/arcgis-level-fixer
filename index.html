@@ -71,7 +71,7 @@ b,strong {
                 <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
         <br>
         <br>
-        <input type="button" value="FEED ME"id="submit" style="width:125px; height:40px; font-size:20px; font-weight: bold;" ><img id="spinner" style="display:none" src="/ajax-loader.gif"/>
+        <input type="button" value="FEED ME"id="submit" style="width:125px; height:40px; font-size:20px; font-weight: bold;" ><img id="spinner" style="display:none" src="images/ajax-loader.gif"/>
         <br><br><br>
         <div id="response">
         </div>
@@ -100,7 +100,7 @@ b,strong {
 
             $.ajax({
                 type: "GET",
-                url: "/examine?url=" + dataString,
+                url: "http://arcgis-level-fixer.elasticbeanstalk.com/examine?url=" + dataString,
                 success: function(result){
                     $("#response").html(result);
                     var html = "";
