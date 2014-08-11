@@ -53,7 +53,7 @@ strong {
 <body>
 <div class="header">
         <div class="vert-text">
-            <h1><strong style="color:white">A</strong>rcGIS<strong style="color:white">L</strong>evel <strong style="color:white">F</strong>ixer</h1>
+            <h1><strong style="color:white">A</strong>rcGIS&nbsp;<strong style="color:white">L</strong>evel&nbsp;<strong style="color:white">F</strong>ixer</h1>
             <h2>
                 <p><strong style="color:white">Speaking of cats, Where is the MapServer?</p> </h2>
                 <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
@@ -65,18 +65,6 @@ strong {
         </div>
         </div>
     </div>
-    <!--<div style="text-align: center">
-        <h1><strong style="color:darkred">A</strong>rcGIS <strong style="color:darkred">L</strong>evel <strong style="color:darkred">F</strong>ixer</h1>
-        <img src="http://img2.wikia.nocookie.net/__cb20110128060130/alf/images/9/92/Cat_sandwich.jpg"/>
-        <br>
-        <b>Where is the MapServer?</b><br>
-        <input style="width:80%; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
-        <br>
-        <input type="button" value="submit "id="submit"><img id="spinner" style="display:none" src="/ajax-loader.gif"/>
-        <br><br><br>
-        <div id="response">
-        </div>
-    </div>-->
 
     <script>
         function startLoading() {
@@ -106,9 +94,10 @@ strong {
                     var html = "";
 
                     if(result.lods["0"] === 0) {
-                        html += "<h1>It's already a good URL!</h1><br><i>it should work as a basemap</i>";
+                        html += "<h2>That's a tasty cat!</h2><i>it should work as a basemap</i>";
+                        return;
                     } else {
-                        html += "<b>Use this url for your basemap:</b><br><a href=''" + result.alf + "'>" + result.alf + "</a>";
+                        html += "<h2>Something's wrong with that cat... here's a new one:</h2>" + result.alf;
                     }
 
                     html += "<br><br>";
