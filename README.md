@@ -10,8 +10,8 @@ The goal of this application is to provide an Esri smart proxy that allows the u
 This application does the following:
 
 1. Looks up the ArcGIS MapServer's LOD configuration
-2. Compares the zoom level resolutions to the [OSM zoom levels](http://wiki.openstreetmap.org/wiki/Zoom_levels) 
-3. Redirects the request with a 302 status code to the ArcGIS MapServer
+2. Compares the zoom level resolutions to the typical [web-map zoom levels](http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer) 
+3. Redirects the request with a 302 status code to the ArcGIS MapServer with the corrected `z` level
 
 
 To use:
