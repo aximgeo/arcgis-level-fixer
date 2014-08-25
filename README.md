@@ -5,8 +5,6 @@
 
 ---
 
-ArcGIS map services do not require all "zoom levels" to be published. This messes up the zoom level index for other applications, which always starts at 0. This project intends to make it a little smarter.
-
 This application does the following:
 
 1. Looks up the ArcGIS MapServer's LOD configuration
