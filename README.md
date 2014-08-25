@@ -5,6 +5,8 @@
 
 ---
 
+The goal of this application is to provide an Esri smart proxy that allows the use of AGOL and ArcServer resources with custom zoom levels in tools/applications expecting traditional webmap zoom levels and resolutions
+
 This application does the following:
 
 1. Looks up the ArcGIS MapServer's LOD configuration
