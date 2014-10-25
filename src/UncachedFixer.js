@@ -9,8 +9,7 @@ exports.UncachedFixer = function(url) {
 
 exports.UncachedFixer.prototype.getRedirectData = function (protocol, host, urlPart) {
     return {
-        "alf":protocol + "://" + host + "/" + urlPart + "/arcgis/z/{z}/y/{y}/x/{x}",
-        "lods":this.getValidLODs()
+        "alf":protocol + "://" + host + "/" + urlPart + "/arcgis/z/{z}/y/{y}/x/{x}"
     };
 };
 
