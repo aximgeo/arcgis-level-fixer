@@ -9,7 +9,7 @@ exports.TileFixerFactory = function() {
 
 exports.TileFixerFactory.createTileMapper = function (url, callback) {
     "use strict";
-    exports.TileFixerFactory.getArcGISConfiguration(function(err, data) {
+    exports.TileFixerFactory.getArcGISConfiguration(url, function(err, data) {
         if(err) {
             return callback(err);
         }
@@ -26,9 +26,9 @@ exports.TileFixerFactory.createTileMapper = function (url, callback) {
     });
 };
 
-exports.TileFixerFactory.getArcGISConfiguration = function (callback) {
+exports.TileFixerFactory.getArcGISConfiguration = function (url, callback) {
     "use strict";
-    var configUrl = 'http://' + this.url + '?f=pjson';
+    var configUrl = 'http://' + url + '?f=pjson';
     http.get(configUrl, function(res) {
         var body = '';
 
