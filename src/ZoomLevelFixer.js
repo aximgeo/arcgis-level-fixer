@@ -17,8 +17,8 @@ exports.ZoomLevelFixer = function(url, tileinfo) {
         for(var ci in correctResolutions) {
             var correctRes = correctResolutions[ci];
 
-            if(self.withinPercentage(arcgisLOD.resolution, correctRes, allowedResolutionError)) {
-                self.lodMapper[ci] = arcgisLOD.level;
+            if(this.withinPercentage(arcgisLOD.resolution, correctRes, allowedResolutionError)) {
+                this.lodMapper[ci] = arcgisLOD.level;
                 break;
             }
         }
