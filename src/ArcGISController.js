@@ -70,9 +70,9 @@ exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
             parseX = /x\/([0-9]+)/i;
 
         var url = req.url.match(parseUrl)[1],
-            z = req.url.match(parseZ)[1],
-            y = req.url.match(parseY)[1],
-            x = req.url.match(parseX)[1],
+            z = parseInt(req.url.match(parseZ)[1], 10),
+            y = parseInt(req.url.match(parseY)[1], 10),
+            x = parseInt(req.url.match(parseX)[1], 10),
             baseUrl = req.protocol + "://" + url,
             queryParams = req.query;
 
