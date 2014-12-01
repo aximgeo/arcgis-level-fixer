@@ -105,24 +105,15 @@ b,strong {
                 url: "/examine?url=" + dataString,
                 success: function(result){
                     $("#response").html(result);
-                    var html = "";
-
-                    if(result.lods["0"] === 0) {
-                        html += "<h2>That's a tasty cat!</h2><i>it should work as a basemap</i>";
-                        return;
-                    } else {
-                        html += "<h2>Something's wrong with that cat... here's a new one:</h2>" + result.alf;
+                    var html = "<h2>Something's wrong with that cat... here's a new one:</h2>" + result.alf;
+                    if(result.lods != null) {
+                        html += "<br><br>";
+                        html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>OSM LOD</th></tr>";
+                        for (var lodOSM in result.lods) {
+                            html += "<tr><td>" + result.lods[lodOSM] + "</td><td>now maps to</td><td>" + lodOSM + "</td></tr>";
+                        }
+                        html += "</table>";
                     }
-
-                    html += "<br><br>";
-
-                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>OSM LOD</th></tr>";
-
-                    for(var lodOSM in result.lods) {
-                        html += "<tr><td>"+result.lods[lodOSM]+"</td><td>now maps to</td><td>"+lodOSM+"</td></tr>";
-                    }
-
-                    html += "</table>";
 
                     $("#response").html(html);
                     stopLoading();
