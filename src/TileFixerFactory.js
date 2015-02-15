@@ -32,7 +32,7 @@ exports.TileFixerFactory.getArcGISConfiguration = function (mapserverUrl, callba
     "use strict";
     var configUrl = mapserverUrl + '?f=pjson';
 
-    (url.parse(configUrl).protocol === 'https' ? https : http).get(configUrl, function(res) {
+    (url.parse(configUrl).protocol === 'https:' ? https : http).get(configUrl, function(res) {
         var body = '';
 
         res.on('data', function(chunk) {

@@ -69,7 +69,7 @@ exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
             z = parseInt(req.url.match(parseZ)[1], 10),
             y = parseInt(req.url.match(parseY)[1], 10),
             x = parseInt(req.url.match(parseX)[1], 10),
-            baseUrl = req.protocol + "://" + url,
+            baseUrl = url,
             queryParams = req.query;
 
         if(!isInt(z) || !isInt(x) || !isInt(y)) {
