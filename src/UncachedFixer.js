@@ -1,5 +1,4 @@
-var http = require('http'),
-    config = require('../config.json'),
+var config = require('../config.json'),
     TileifyAGS = require('tileify-ags').TileifyAGS;
 
 exports.UncachedFixer = function(url) {

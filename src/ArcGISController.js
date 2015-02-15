@@ -38,19 +38,15 @@ exports.ArcGISController.prototype.getTileFixer = function (url, callback) {
 exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
     "use strict";
     try {
-        var url_parts = url.parse(req.url, true);
-        var query = url_parts.query;
+        var mapserverUrl = req.query.url;
 
-        var test_url_parts = url.parse(query.url, true);
-        var test_url = (test_url_parts.host || "") + test_url_parts.pathname;
-
-        this.getTileFixer(test_url, function(err, fixer) {
+        this.getTileFixer(mapserverUrl, function(err, fixer) {
             if(err) {
                 res.status(500).send("this doesn't taste like a cat.");
                 return;
             }
 
-            res.json(fixer.getRedirectData(req.protocol, req.headers.host, test_url));
+            res.json(fixer.getRedirectData(req.protocol, req.headers.host, mapserverUrl));
         });
     } catch (ex) {
         console.log(ex);
@@ -73,7 +69,7 @@ exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
             z = parseInt(req.url.match(parseZ)[1], 10),
             y = parseInt(req.url.match(parseY)[1], 10),
             x = parseInt(req.url.match(parseX)[1], 10),
-            baseUrl = req.protocol + "://" + url,
+            baseUrl = url,
             queryParams = req.query;
 
         if(!isInt(z) || !isInt(x) || !isInt(y)) {

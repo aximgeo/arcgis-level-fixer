@@ -1,4 +1,6 @@
-var http = require('http'),
+var https = require('https'),
+    http = require('http'),
+    url = require('url'),
     config = require('../config.json'),
     UncachedFixer = require('./UncachedFixer.js').UncachedFixer,
     ZoomLevelFixer = require('./ZoomLevelFixer.js').ZoomLevelFixer;
@@ -17,7 +19,7 @@ exports.TileFixerFactory.createTileMapper = function (url, callback) {
         if (data != null && data.tileInfo != null && data.tileInfo.lods != null) {
             //create ZoomLevelFixer
             callback(undefined, new ZoomLevelFixer(url, data.tileInfo));
-        } else if (data != null && data.supportedImageFormatTypes != null){
+        } else if (data != null && data.currentVersion != null){
             // create UncachedFixer
             callback(undefined, new UncachedFixer(url));
         } else {
@@ -26,10 +28,11 @@ exports.TileFixerFactory.createTileMapper = function (url, callback) {
     });
 };
 
-exports.TileFixerFactory.getArcGISConfiguration = function (url, callback) {
+exports.TileFixerFactory.getArcGISConfiguration = function (mapserverUrl, callback) {
     "use strict";
-    var configUrl = 'http://' + url + '?f=pjson';
-    http.get(configUrl, function(res) {
+    var configUrl = mapserverUrl + '?f=pjson';
+
+    (url.parse(configUrl).protocol === 'https:' ? https : http).get(configUrl, function(res) {
         var body = '';
 
         res.on('data', function(chunk) {
