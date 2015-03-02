@@ -5,7 +5,8 @@ var express = require('express'),
     config = require('./config.json'),
     routes = require('./src/routes.js'),
     httpsApp = express(),
-    httpApp = express();
+    httpApp = express(),
+    favicon = require('serve-favicon');
 
 //CORS
 var allowCrossDomain = function(req, res, next) {
@@ -16,8 +17,9 @@ var allowCrossDomain = function(req, res, next) {
     next();
 };
 
+httpApp.use(favicon(__dirname + '/images/favicon.png'));
 httpApp.use(allowCrossDomain);                  //allow CORS requests
-httpApp.use(express.static(__dirname +'/images'));
+httpApp.use('/images', express.static(__dirname +'/images'));
 routes.setup(httpApp);
 
 httpApp.set('port', process.env.PORT || config.http.port);

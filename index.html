@@ -14,12 +14,11 @@
         }
 
         .header {
-            display: table;
-            width: 100%;
             position: relative;
             text-align: center;
             font-size: 4em;
             border-bottom: solid 1px #908759;
+            padding:20px;
         }
 
         b,strong {
@@ -73,15 +72,16 @@
     </style>
 </head>
 <body>
-<br><br>
 <div class="header">
-    <img height="150px" src="./images/alf.png"/><p>
-    <strong>A</strong>rcGIS&nbsp;<strong>L</strong>evel&nbsp;<strong>F</strong>ixer
+    <img height="150px" src="./images/alf.png"/>
+    <div>
+      <strong>A</strong>rcGIS&nbsp;<strong>L</strong>evel&nbsp;<strong>F</strong>ixer
+    </div>
 </div>
 <div class="vert-body">
     <div class="vert-body-inner">
         <div class="vert-text">
-            <strong>ALF</strong> serves redirect URLs to fix <strong>Level of Details (LODs)</strong> for ArcServer tiled services and <strong>tileify's ArcGIS non-tiled</strong> services
+            <strong>ALF</strong> serves redirect URLs to align published <strong>Level of Details (LODs)</strong> for ArcServer tiled services and <strong>tileify's ArcGIS non-tiled</strong> services
             <br>
             <br>
             <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
@@ -102,12 +102,15 @@
         $("#spinner").show();
 
         startTime = Date.now();
+        
+        $("html, body").animate({ scrollTop: $(document).height() }, 1000);
     }
     function stopLoading() {
         setTimeout(function() {
             $("#submit").show();
             $("#response").show();
             $("#spinner").hide();
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         }, Math.max(0, minDisplayTime - (startTime - Date.now())));
     }
     $("#inputtext").keyup(function(e){
