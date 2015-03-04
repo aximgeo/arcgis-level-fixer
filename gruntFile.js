@@ -29,8 +29,8 @@ module.exports = function(grunt) {
         grunt.event.once('git-describe', function (rev) {
             grunt.log.writeln("Git Revision: " + rev);
             gitRevision = rev;
-            grunt.config.set('uglify.options.banner', '/*!\nGeoMetri API v' + gitRevision + '\nCopyright 2013-2014 Geographic Information Services, Inc \n' +
-                'GeoMetri uses third-party libraries which remain the property of their respective authors.\n*/\n\n');
+            grunt.config.set('uglify.options.banner', '/*!\nArcGIS Level Fixer v' + gitRevision + '\nCopyright 2014 Geographic Information Services, Inc \n' +
+                'ALF uses third-party libraries which remain the property of their respective authors.\n*/\n\n');
         });
         grunt.task.run('git-describe');
     });
