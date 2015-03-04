@@ -5,7 +5,7 @@
 
 ---
 
-**Use Case:** You've come across Open Data hosted on ArcServer or AGOL, but the data wasn't published using the Google/Bing tiling scheme. Not to worry: ALF, an Esri-aware redirect proxy, is here to help! (All the way from planet Melmac)
+**Use Case:** You've come across Open Data hosted on ArcServer or AGOL, but the data wasn't published using the Google/Bing/OSM tiling scheme. Not to worry: ALF, an Esri-aware redirect proxy, is here to help! (All the way from planet Melmac)
 
 The goal of this application is to provide an Esri-aware proxy that allows the use of AGOL and ArcServer not published with the Google/Bing/OSM zoom levels to be used in tools/applications that expect the Google/Bing/OSM zoom levels and resolutions.
 
@@ -14,8 +14,8 @@ The goal of this application is to provide an Esri-aware proxy that allows the u
 This application does the following:
 
 1. Looks up the ArcGIS MapServer's LOD configuration
-2. Compares the zoom level resolutions to the typical [web-map zoom levels](http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer) 
-3. Redirects the request with a 302 status code to the ArcGIS MapServer with the corrected `z` level
+2. Compares the zoom level resolutions to the Google/Bing/OSM [web-map zoom levels](http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer) 
+3. Redirects the request with a 302 status code to the ArcGIS MapServer with the modified `z` level
 
 
 To use:
