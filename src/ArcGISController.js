@@ -1,57 +1,53 @@
-var ZoomLevelMapper = require('./ZoomLevelMapper.js').ZoomLevelMapper,
-    url = require('url');
+/*!
+ArcGIS Level Fixer v--3d8d678
+Copyright 2014 Geographic Information Services, Inc 
+ALF uses third-party libraries which remain the property of their respective authors.
+*/
+
+var TileFixerFactory = require("./TileFixerFactory.js").TileFixerFactory, url = require("url");
 
 exports.ArcGISController = function() {
     "use strict";
-
-    this.LODCache = {};
-
+    this.TileFixerCache = {};
     var self = this;
     setInterval(function clearOldCacheItems() {
-        for(var cacheKey in self.LODCache) {
-            var cacheItem = self.LODCache[cacheKey];
-            if(cacheItem == null || cacheItem.lastTouch < Date.now() - 300000) {
-                delete self.LODCache[cacheKey];
+        for (var cacheKey in self.TileFixerCache) {
+            var cacheItem = self.TileFixerCache[cacheKey];
+            if (cacheItem == null || cacheItem.lastTouch < Date.now() - 3e5) {
+                delete self.TileFixerCache[cacheKey];
             }
         }
-    }, 60000);
+    }, 6e4);
 };
 
-exports.ArcGISController.prototype.getZoomLevelMapper = function (url, callback) {
+exports.ArcGISController.prototype.getTileFixer = function(url, callback) {
     "use strict";
-    if(this.LODCache[url] == null) {
-        var zoomLevelMapper = new ZoomLevelMapper(url);
-        zoomLevelMapper.init(function(err) {
-            if(err) {
+    var self = this;
+    var cachedFixer = this.TileFixerCache[url];
+    if (cachedFixer != null) {
+        return callback(undefined, this.TileFixerCache[url]);
+    } else {
+        TileFixerFactory.createTileMapper(url, function(err, fixer) {
+            if (err) {
                 return callback(err);
             }
-            return callback(undefined, zoomLevelMapper);
+            fixer.lastTouch = Date.now();
+            self.TileFixerCache[url] = fixer;
+            return callback(undefined, fixer);
         });
-    } else {
-        return callback(undefined, this.LODCache[url]);
     }
 };
-exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
+
+exports.ArcGISController.prototype.getRedirectUrl = function(req, res) {
     "use strict";
     try {
-        var url_parts = url.parse(req.url, true);
-        var query = url_parts.query;
-
-        var test_url_parts = url.parse(query.url, true);
-        var test_url = (test_url_parts.host || "") + test_url_parts.pathname;
-        this.getZoomLevelMapper(test_url, function(err, zoomLevelMapper) {
-            if(err) {
+        var mapserverUrl = req.query.url;
+        this.getTileFixer(mapserverUrl, function(err, fixer) {
+            if (err) {
                 res.status(500).send("this doesn't taste like a cat.");
-                console.log(err);
                 return;
             }
-
-            var results = {
-                "alf":req.protocol + "://" + req.headers.host + "/" + test_url + "/arcgis/z/{z}/y/{y}/x/{x}",
-                "lods":zoomLevelMapper.getValidLODs()
-            };
-
-            res.json(results);
+            res.json(fixer.getRedirectData(req.protocol, req.headers.host, mapserverUrl));
         });
     } catch (ex) {
         console.log(ex);
@@ -59,41 +55,26 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
     }
 };
 
-exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
+exports.ArcGISController.prototype.performRedirectUrl = function(req, res) {
     "use strict";
-
     try {
         console.log(req.url);
-
-        var parseUrl = /[/]?(.*(?=[\/]arcgis[\/]?))/i,
-            parseZ = /z\/([0-9]+)/i,
-            parseY = /y\/([0-9]+)/i,
-            parseX = /x\/([0-9]+)/i;
-
-        var url = req.url.match(parseUrl)[1],
-            z = req.url.match(parseZ)[1],
-            y = req.url.match(parseY)[1],
-            x = req.url.match(parseX)[1];
-
-        if(!isInt(z) || !isInt(x) || !isInt(y)) {
+        var parseUrl = /[/]?(.*(?=[\/]arcgis[\/]?))/i, parseZ = /z\/([0-9]+)/i, parseY = /y\/([0-9]+)/i, parseX = /x\/([0-9]+)/i;
+        var url = req.url.match(parseUrl)[1], z = parseInt(req.url.match(parseZ)[1], 10), y = parseInt(req.url.match(parseY)[1], 10), x = parseInt(req.url.match(parseX)[1], 10), baseUrl = url, queryParams = req.query;
+        if (!isInt(z) || !isInt(x) || !isInt(y)) {
             res.status(500).send("X/Y/Z need to be integers");
             return;
         }
-
-        this.getZoomLevelMapper(url, function(err, zoomLevelMapper) {
-            if(err) {
+        this.getTileFixer(url, function(err, fixer) {
+            if (err) {
                 res.status(500).send(err.message);
                 return;
             }
-
-            z = zoomLevelMapper.getCorrectZoomLevel(z);
-
-            if(z == null) {
-                res.status(404).send("The requested LOD is not defined");
+            var redirectUrl = fixer.getRedirectUrl(baseUrl, queryParams, x, y, z);
+            if (redirectUrl == null) {
+                res.status(404).send("The requested tile is not available");
                 return;
             }
-
-            var redirectUrl = req.protocol + "://" + url + "/tile/"+z+"/"+y+"/"+x;
             res.redirect(redirectUrl);
         });
     } catch (ex) {

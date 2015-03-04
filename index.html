@@ -4,134 +4,155 @@
     <title>ALF - I accept cats as payment</title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <style>
-    html {
-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.428571429;
-  color: #fff;
-  color: rgba(255,255,255, 0.5);
-  background-color: #fff;
-  height: 100%;
-  width: 100%;
-}
+        html {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.428571429;
+            color: #b1a87d;
+            height: 100%;
+            width: 100%;
+        }
 
-.vert-text {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-}
+        .header {
+            position: relative;
+            text-align: center;
+            font-size: 4em;
+            border-bottom: solid 1px #908759;
+            padding:20px;
+        }
 
-.vert-text h1 {
-  padding: 0;
-  margin: 0;
-  font-size: 4.5em;
-  font-weight: 700;
-}
+        b,strong {
+            font-weight: 150;
+            color:#6D6334;
+        }
+        
+        a:link,a:visited {
+            color: #6D6334;
+        }
+        a:hover,a:active {
+            color: #40360B;
+        }
 
-html {
-  height: 100%;
-  text-align: center;
-}
+        .vert-text {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
 
-body {
-  height: 100%;
-  text-align: center;
-  opacity: 0.8;
-  background: url(http://img2.wikia.nocookie.net/__cb20110128060130/alf/images/9/92/Cat_sandwich.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
+        .vert-body {
+            display: table;
+            width: 100%;
+            position: relative;
+            text-align: center;
+        }
+        .vert-body-inner {
+            width: 1000px;
+            margin:auto;
+        }
+        .vert-text {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            font-size: 2em;
+            text-align: center;
+        }
 
-.header {
-  display: table;
-  width: 100%;
-  position: relative;
-  opacity: 0.8;
-}
+        html {
+            height: 100%;
+            text-align: center;
+        }
 
-h1 {
-  margin: .67em 0;
-  font-size: 2em;
-}
+        body {
+            height: 100%;
+            text-align: center;
+            background-color: #f5f1de;
+            margin:0px;
+            font-weight: 200;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
 
-b,strong {
-  font-weight: bold;
-}
-
-</style>
+    </style>
 </head>
 <body>
-  <div class="header">
+<div class="header">
+    <img height="150px" src="./images/alf.png"/>
+    <div>
+      <strong>A</strong>rcGIS&nbsp;<strong>L</strong>evel&nbsp;<strong>F</strong>ixer
+    </div>
+</div>
+<div class="vert-body">
+    <div class="vert-body-inner">
         <div class="vert-text">
-            <h1><strong style="color:white">A</strong>rcGIS&nbsp;<strong style="color:white">L</strong>evel&nbsp;<strong style="color:white">F</strong>ixer</h1>
-            <h2>
-                <p><strong style="color:white">Speaking of cats, Where is the MapServer?</p> </h2>
-                <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
-        <br>
-        <br>
-        <input type="button" value="FEED ME"id="submit" style="width:125px; height:40px; font-size:20px; font-weight: bold;" ><img id="spinner" style="display:none" src="images/ajax-loader.gif"/>
-        <br><br><br>
-        <div id="response">
+            <strong>ALF</strong> serves redirect URLs to align published <strong>Level of Details (LODs)</strong> for ArcServer tiled services and <strong>tileify's ArcGIS non-tiled</strong> services
+            <br>
+            <br>
+            <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
+            <br>
+            <br>
+            <input type="button" value="FEED ME"id="submit" style="width:125px; height:40px; font-size:20px; font-weight: bold;" ><img id="spinner" style="display:none" src="http://33.media.tumblr.com/0ed004e88fb1ac332f3466e98c2d0636/tumblr_mu0qqq3ZSr1roa1xxo1_400.gif"/>
         </div>
+        <div id="response" class="response">
         </div>
     </div>
+</div>
 
-    <script>
-        function startLoading() {
-            $("#submit").hide();
-            $("#spinner").show();
-        }
-        function stopLoading() {
+<script>
+    var minDisplayTime = 2000, startTime;
+    function startLoading() {
+        $("#submit").hide();
+        $("#response").hide();
+        $("#spinner").show();
+
+        startTime = Date.now();
+        
+        $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+    }
+    function stopLoading() {
+        setTimeout(function() {
             $("#submit").show();
+            $("#response").show();
             $("#spinner").hide();
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+        }, Math.max(0, minDisplayTime - (startTime - Date.now())));
+    }
+    $("#inputtext").keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            $("#submit").click();
         }
-        $("#inputtext").keyup(function(e){
-            if(e.keyCode == 13)
-            {
-                $("#submit").click();
+    });
+    $("#submit").click(function()
+    {
+        startLoading();
+        var dataString = $("#inputtext").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/examine?url=" + dataString,
+            success: function(result){
+                $("#response").html(result);
+                var html = "<h2>Something's wrong with that cat...here's a new one:</h2><strong><a href='" + result.alf + "'>" + result.alf + "</a></strong>";
+                if(result.lods != null) {
+                    html += "<br><br>";
+                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>Fixed LOD</th></tr>";
+                    for (var lodOSM in result.lods) {
+                        html += "<tr><td>" + result.lods[lodOSM] + "</td><td>now maps to</td><td>" + lodOSM + "</td></tr>";
+                    }
+                    html += "</table>";
+                }
+
+                $("#response").html(html);
+                stopLoading();
+            },
+            error: function(result) {
+                $("#response").html("<h2>This doesn't taste like a cat...it should look like this:</h2><strong><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a></strong><br><br><h2>...or this:</h2><strong><a href='https://gismaps.vbgov.com/arcgisimage/rest/services/Imagery/Accuplus2013/ImageServer'>https://gismaps.vbgov.com/arcgisimage/rest/services/Imagery/Accuplus2013/ImageServer</a></strong>");
+                stopLoading();
             }
         });
-        $("#submit").click(function()
-        {
-            startLoading();
-            var dataString = $("#inputtext").val();
-
-            $.ajax({
-                type: "GET",
-                url: "http://arcgis-level-fixer.elasticbeanstalk.com/examine?url=" + dataString,
-                success: function(result){
-                    $("#response").html(result);
-                    var html = "";
-
-                    if(result.lods["0"] === 0) {
-                        html += "<h2>That's a tasty cat!</h2><i>it should work as a basemap</i>";
-                        return;
-                    } else {
-                        html += "<h2>Something's wrong with that cat... here's a new one:</h2>" + result.alf;
-                    }
-
-                    html += "<br><br>";
-
-                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>OSM LOD</th></tr>";
-
-                    for(var lodOSM in result.lods) {
-                        html += "<tr><td>"+result.lods[lodOSM]+"</td><td>now maps to</td><td>"+lodOSM+"</td></tr>";
-                    }
-
-                    html += "</table>";
-
-                    $("#response").html(html);
-                    stopLoading();
-                },
-                error: function(result) {
-                    $("#response").html("<h2>This doesn't taste like a cat.</h2>It should look like this:<br><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a>");
-                    stopLoading();
-                }
-            });
-        });
-    </script>
+    });
+</script>
     <a href="https://github.com/gisinc/arcgis-level-fixer"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
 </body>
 </html>
