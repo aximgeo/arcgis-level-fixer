@@ -1,7 +1,7 @@
 {
-  "name": "arcgis-on-mapbox",
-  "version": "0.1.0",
-  "description": "ArcGIS mapserver doesn't require all \"zoom levels\" to be published. This messes up the zoom level index, which always starts at 0. This project intends to make it a little smarter.",
+  "name": "arcgis-level-fixer",
+  "version": "0.2.0",
+  "description": "ArcGIS mapserver doesn't require standard \"zoom levels\" to be published. This can mess up the zoom level index, which always starts at 0. This project intends to make it a little smarter.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
