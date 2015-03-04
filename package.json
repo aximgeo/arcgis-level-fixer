@@ -23,6 +23,7 @@
   "homepage": "https://github.com/cbupp/arcgis-level-fixer",
   "dependencies": {
     "express": "^4.8.2",
+    "serve-favicon": "^2.2.0",
     "tileify-ags": "1.0.0"
   },
   "devDependencies": {
