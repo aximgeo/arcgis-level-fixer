@@ -5,7 +5,11 @@
 
 ---
 
-The goal of this application is to provide an Esri smart proxy that allows the use of AGOL and ArcServer resources with custom zoom levels in tools/applications expecting traditional webmap zoom levels and resolutions
+*Use Case:* You've come across Open Data hosted on ArcServer or AGOL, but the data wasn't published using the Google/Bing tiling scheme. Not to worry: ALF, an Esri-aware redirect proxy, is here to help! (All the way from planet Melmac)
+
+The goal of this application is to provide an Esri-aware proxy that allows the use of AGOL and ArcServer not published with the Google/Bing/OSM zoom levels to be used in tools/applications that expect the Google/Bing/OSM zoom levels and resolutions.
+
+*NOTE:* ArcGIS Server supports Google/Bing/OSM zoom levels out of the box. The best course of action for supporting applications that require Google/Bing/OSM zoom levels may be to republish the service (or publish a new service) and select the `Bing tiling scheme`.
 
 This application does the following:
 
