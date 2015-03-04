@@ -25,8 +25,12 @@
             font-weight: 150;
             color:#6D6334;
         }
-
-        .alf {
+        
+        a:link,a:visited {
+            color: #6D6334;
+        }
+        a:hover,a:active {
+            color: #40360B;
         }
 
         .vert-text {
@@ -129,10 +133,10 @@
             url: "/examine?url=" + dataString,
             success: function(result){
                 $("#response").html(result);
-                var html = "<h2>Something's wrong with that cat... here's a new one:</h2>" + result.alf;
+                var html = "<h2>Something's wrong with that cat...here's a new one:</h2><strong><a href='" + result.alf + "'>" + result.alf + "</a></strong>";
                 if(result.lods != null) {
                     html += "<br><br>";
-                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>OSM LOD</th></tr>";
+                    html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>Fixed LOD</th></tr>";
                     for (var lodOSM in result.lods) {
                         html += "<tr><td>" + result.lods[lodOSM] + "</td><td>now maps to</td><td>" + lodOSM + "</td></tr>";
                     }
@@ -143,7 +147,7 @@
                 stopLoading();
             },
             error: function(result) {
-                $("#response").html("<h2>This doesn't taste like a cat.</h2><br>It should look like this:<br><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a>");
+                $("#response").html("<h2>This doesn't taste like a cat...it should look like this:</h2><strong><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a></strong><br><br><h2>...or this:</h2><strong><a href='https://gismaps.vbgov.com/arcgisimage/rest/services/Imagery/Accuplus2013/ImageServer'>https://gismaps.vbgov.com/arcgisimage/rest/services/Imagery/Accuplus2013/ImageServer</a></strong>");
                 stopLoading();
             }
         });
