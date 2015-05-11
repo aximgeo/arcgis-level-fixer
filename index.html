@@ -130,7 +130,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/examine?url=" + dataString,
+            url: "http://arcgis-level-fixer.elasticbeanstalk.com//examine?url=" + dataString,
             success: function(result){
                 $("#response").html(result);
                 var html = "<h2>Something's wrong with that cat...here's a new one:</h2><strong><a href='" + result.alf + "'>" + result.alf + "</a></strong>";
