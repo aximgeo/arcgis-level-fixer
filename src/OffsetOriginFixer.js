@@ -48,6 +48,7 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
         return;
     }
 
+    //TODO: need to determine the correct offset to use
     var xOffset = 20, yOffset = 20;
 
     var tileNW, tileNE, tileSW, tileSE;
@@ -82,7 +83,7 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
             return callback(err);
         }
 
-        var img = images(256,256).fill(0xff, 0x00, 0x00, 0.5);
+        var img = images(256,256);
         
         img.draw(tileNW, 0, 0);
         img.draw(tileNE, xOffset, 0);
