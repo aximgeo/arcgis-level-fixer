@@ -49,21 +49,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
         return;
     }
 
-    // using: https://msdn.microsoft.com/en-us/library/bb259689.aspx
-    //map width = map height = (256 * 2 ^ level) pixels
-
-    /*
-    // not sure where "origin" comes into play... maybe it's as simple as creating a ratio...
-    var xRatio = this.tileinfo.origin.x / config.correctOrigin.x,
-        yRatio = this.tileinfo.origin.y / config.correctOrigin.y;
-
-    var adjustedX = x * xRatio,
-        adjustedY = y * yRatio;
-
-    var adjustedTileX = Math.floor(adjustedX),
-        adjustedTileY = Math.floor(adjustedY);
-    */
-
     var tileWidth = this.tileinfo.cols, 
         tileHeight = this.tileinfo.rows;
 
@@ -75,14 +60,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
     var adjustedX = ((config.correctOrigin.x - this.tileinfo.origin.x) / unitsPerPixel),
         adjustedY = ((config.correctOrigin.y - this.tileinfo.origin.y) / unitsPerPixel);
 
-    console.log("unitsPerPixel", unitsPerPixel);
-    console.log("x", x);
-    console.log("y", y);
-    console.log("adjustedX", adjustedX);
-    console.log("adjustedY", adjustedY);
-    console.log("x-adjustedX", x-adjustedX);
-    console.log("y-adjustedY", y-adjustedY);
-
     adjustedX = x-adjustedX;
     adjustedY = y-adjustedY;
 
@@ -92,9 +69,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
     var xOffset = Math.floor(tileWidth * (adjustedX - adjustedTileX)), 
         yOffset = Math.floor(tileHeight * (adjustedY - adjustedTileY));
 
-    console.log("X", x, adjustedX, adjustedTileX, xOffset);
-    console.log("Y", y, adjustedY, adjustedTileY, yOffset);
-
     var tileNW, tileNE, tileSW, tileSE;
     async.parallel([
         function(callback) {
@@ -102,7 +76,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
                 if(err != null || tile == null) {
                     return callback();
                 }
-                console.log("NW", tile);
                 try {
                     tileNW = images(images(tile), xOffset, yOffset, tileWidth-xOffset, tileHeight-yOffset);
                 } catch(e) {
@@ -116,7 +89,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
                 if(err != null || tile == null) {
                     return callback();
                 }
-                console.log("NE", tile);
                 try {
                     tileNE = images(images(tile), 0,  yOffset, xOffset, tileHeight-yOffset);
                 } catch(e) {
@@ -130,7 +102,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
                 if(err != null || tile == null) {
                     return callback();
                 }
-                console.log("SW", tile);
                 try {
                     tileSW = images(images(tile), xOffset, 0, tileWidth-xOffset, yOffset);
                 } catch(e) {
@@ -144,7 +115,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
                 if(err != null || tile == null) {
                     return callback();
                 }
-                console.log("SE", tile);
                 try {
                     tileSE = images(images(tile), 0, 0, xOffset, yOffset);
                 } catch(e) {
@@ -180,7 +150,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
 function getTileImage(baseUrl, x, y, z, callback) {
     "use strict";
     var url = baseUrl + "/tile/" + z + "/" + y + "/" + x;
-    console.log(url);
     http.request(url, function(response) {
         var data = new Stream();                                                    
 
