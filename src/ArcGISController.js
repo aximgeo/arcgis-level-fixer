@@ -1,5 +1,4 @@
-var TileFixerFactory = require('./TileFixerFactory.js').TileFixerFactory,
-    url = require('url');
+var TileFixerFactory = require('./TileFixerFactory.js').TileFixerFactory;
 
 exports.ArcGISController = function() {
     "use strict";
@@ -20,7 +19,7 @@ exports.ArcGISController = function() {
 exports.ArcGISController.prototype.getTileFixer = function (url, callback) {
     "use strict";
     var self = this;
-    var cachedFixer = this.TileFixerCache[url]
+    var cachedFixer = this.TileFixerCache[url];
     if(cachedFixer != null){
         return callback(undefined, this.TileFixerCache[url]);
     } else {

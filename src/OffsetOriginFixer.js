@@ -40,6 +40,7 @@ exports.OffsetOriginFixer.prototype.getRedirectData = function (protocol, host, 
 };
 
 exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryParams, x, y, z, callback) {
+    "use strict";
     var adjustedZ = this.getCorrectZoomLevel(z);
 
     console.log(baseUrl, this.lodMapper, x, y, z, adjustedZ);
@@ -159,16 +160,25 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
 
         var img = images(256,256);
         
-        if(tileNW != null) img.draw(tileNW, 0, 0);
-        if(tileNE != null) img.draw(tileNE, tileWidth-xOffset, 0);
-        if(tileSW != null) img.draw(tileSW, 0, tileHeight-yOffset);
-        if(tileSE != null) img.draw(tileSE, tileWidth-xOffset, tileHeight-yOffset);
+        if(tileNW != null) {
+            img.draw(tileNW, 0, 0);
+        }
+        if(tileNE != null) {
+            img.draw(tileNE, tileWidth-xOffset, 0);
+        }
+        if(tileSW != null) {
+            img.draw(tileSW, 0, tileHeight-yOffset);
+        }
+        if(tileSE != null) {
+            img.draw(tileSE, tileWidth-xOffset, tileHeight-yOffset);
+        }
 
         return callback(undefined, img.encode('png'));
     });  
 };
 
 function getTileImage(baseUrl, x, y, z, callback) {
+    "use strict";
     var url = baseUrl + "/tile/" + z + "/" + y + "/" + x;
     console.log(url);
     http.request(url, function(response) {

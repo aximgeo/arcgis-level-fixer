@@ -1,5 +1,4 @@
-var http = require('http'),
-    config = require('../config.json'),
+var config = require('../config.json'),
     correctResolutions = config.correctResolutions,
     allowedResolutionError = config.allowedResolutionError;
 
@@ -34,6 +33,7 @@ exports.ZoomLevelFixer.prototype.getRedirectData = function (protocol, host, url
 };
 
 exports.ZoomLevelFixer.prototype.getRedirectUrl = function (baseUrl, queryParams, x, y, z) {
+    "use strict";
     z = this.getCorrectZoomLevel(z);
 
     if(z == null) {
