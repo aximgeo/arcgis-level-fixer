@@ -43,8 +43,6 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
     "use strict";
     var adjustedZ = this.getCorrectZoomLevel(z);
 
-    console.log(baseUrl, this.lodMapper, x, y, z, adjustedZ);
-
     if(z == null) {
         return;
     }
@@ -57,97 +55,59 @@ exports.OffsetOriginFixer.prototype.getCorrectTile = function (baseUrl, queryPar
      * origin is the lower left corner of the 0/0 tile
      */
     var unitsPerPixel = 78271.516 / Math.pow(2,adjustedZ+1);
-    var adjustedX = ((config.correctOrigin.x - this.tileinfo.origin.x) / unitsPerPixel),
-        adjustedY = ((config.correctOrigin.y - this.tileinfo.origin.y) / unitsPerPixel);
-
-    adjustedX = x-adjustedX;
-    adjustedY = y-adjustedY;
+    var adjustedX = x-((config.correctOrigin.x - this.tileinfo.origin.x) / unitsPerPixel),
+        adjustedY = y-((config.correctOrigin.y - this.tileinfo.origin.y) / unitsPerPixel);
 
     var adjustedTileX = Math.floor(adjustedX),
         adjustedTileY = Math.floor(adjustedY);
 
     var xOffset = Math.floor(tileWidth * (adjustedX - adjustedTileX)), 
         yOffset = Math.floor(tileHeight * (adjustedY - adjustedTileY));
-
-    var tileNW, tileNE, tileSW, tileSE;
+    
+    var img = images(256,256);
+        
     async.parallel([
-        function(callback) {
-            getTileImage(baseUrl, adjustedTileX, adjustedTileY, adjustedZ, function(err, tile) {
-                if(err != null || tile == null) {
-                    return callback();
+        function getAndDrawNorthWestTile(callback) {
+            getTileImage(baseUrl, adjustedTileX, adjustedTileY, adjustedZ, xOffset, yOffset, tileWidth-xOffset, tileHeight-yOffset, function(err, tile) {
+                if(tile != null) {
+                    img.draw(tile, 0, 0);
                 }
-                try {
-                    tileNW = images(images(tile), xOffset, yOffset, tileWidth-xOffset, tileHeight-yOffset);
-                } catch(e) {
-                    console.log("NW", e);
-                }
-                callback(err);
+                callback();
             });
         },
-        function(callback) {
-            getTileImage(baseUrl, adjustedTileX+1, adjustedTileY, adjustedZ, function(err, tile) {
-                if(err != null || tile == null) {
-                    return callback();
+        function getAndDrawNorthEastTile(callback) {
+            getTileImage(baseUrl, adjustedTileX+1, adjustedTileY, adjustedZ, 0,  yOffset, xOffset, tileHeight-yOffset, function(err, tile) {
+                if(tile != null) {
+                    img.draw(tile, tileWidth-xOffset, 0);
                 }
-                try {
-                    tileNE = images(images(tile), 0,  yOffset, xOffset, tileHeight-yOffset);
-                } catch(e) {
-                    console.log("NE", e);
-                }
-                callback(err);
+                callback();
             });
         },
-        function(callback) {
-            getTileImage(baseUrl, adjustedTileX, adjustedTileY+1, adjustedZ, function(err, tile) {
-                if(err != null || tile == null) {
-                    return callback();
+        function getAndDrawSouthWestTile(callback) {
+            getTileImage(baseUrl, adjustedTileX, adjustedTileY+1, adjustedZ, xOffset, 0, tileWidth-xOffset, yOffset, function(err, tile) {
+                if(tile != null) {
+                    img.draw(tile, 0, tileHeight-yOffset);
                 }
-                try {
-                    tileSW = images(images(tile), xOffset, 0, tileWidth-xOffset, yOffset);
-                } catch(e) {
-                    console.log("SW", e);
-                }
-                callback(err);
+                callback();
             });
         },
-        function(callback) {
-            getTileImage(baseUrl, adjustedTileX+1, adjustedTileY+1, adjustedZ, function(err, tile) {
-                if(err != null || tile == null) {
-                    return callback();
+        function getAndDrawSouthEastTile(callback) {
+            getTileImage(baseUrl, adjustedTileX+1, adjustedTileY+1, adjustedZ, 0, 0, xOffset, yOffset, function(err, tile) {
+                if(tile != null) {
+                    img.draw(tile, tileWidth-xOffset, tileHeight-yOffset);
                 }
-                try {
-                    tileSE = images(images(tile), 0, 0, xOffset, yOffset);
-                } catch(e) {
-                    console.log("SE", e);
-                }
-                callback(err);
+                callback();
             });
         }
     ], function(err) {
         if(err) {
             return callback(err);
         }
-
-        var img = images(256,256);
-        
-        if(tileNW != null) {
-            img.draw(tileNW, 0, 0);
-        }
-        if(tileNE != null) {
-            img.draw(tileNE, tileWidth-xOffset, 0);
-        }
-        if(tileSW != null) {
-            img.draw(tileSW, 0, tileHeight-yOffset);
-        }
-        if(tileSE != null) {
-            img.draw(tileSE, tileWidth-xOffset, tileHeight-yOffset);
-        }
-
         return callback(undefined, img.encode('png'));
     });  
 };
 
-function getTileImage(baseUrl, x, y, z, callback) {
+function getTileImage(baseUrl, x, y, z, imgX, imgY, imgW, imgH, callback) {
     "use strict";
     var url = baseUrl + "/tile/" + z + "/" + y + "/" + x;
     http.request(url, function(response) {
@@ -158,11 +118,17 @@ function getTileImage(baseUrl, x, y, z, callback) {
         });
 
         response.on('end', function() {
-            console.log(response.statusCode);
             if(response.statusCode === 404) {
+                //no tile data
                 return callback();
             }
-            return callback(undefined, data.read());                            
+
+            try {
+                var tile = images(images(data.read()), imgX, imgY, imgW, imgH);
+                return callback(undefined, tile);
+            } catch(e) {
+                return callback(e);
+            }                            
         });                                                                         
     }).end();
 }
