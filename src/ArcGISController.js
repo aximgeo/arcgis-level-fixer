@@ -57,10 +57,10 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
 exports.ArcGISController.prototype.fixAndServe = function (req, res) {
     "use strict";
     try {
-        console.log(req.url);
+        console.log("FIX-N-SERVE", req.url);
 
 
-        var parseUrl = /[/]?(.*(?=[\/]arcgis[\/]?))/i,
+        var parseUrl = /[/]?fix[-]n[-]serve[/](.*(?=[\/]arcgis[\/]?))/i,
             parseZ = /z\/([0-9]+)/i,
             parseY = /y\/([0-9]+)/i,
             parseX = /x\/([0-9]+)/i;
@@ -88,15 +88,15 @@ exports.ArcGISController.prototype.fixAndServe = function (req, res) {
                 return;
             }
 
-            var tile = fixer.getCorrectTile(baseUrl, queryParams, x, y, z);
-            if(tile == null) {
-                res.status(404).send("The requested tile is not available");
-                return;
-            }
+            fixer.getCorrectTile(baseUrl, queryParams, x, y, z, function(err, tile) {
+                if(tile == null) {
+                    res.status(404).send("The requested tile is not available");
+                    return;
+                }
 
-            //todo server up the tile
-
-            res.send(tile);
+                res.writeHead(200, {'Content-Type': 'image/png' });
+                res.end(tile, 'binary');
+            });
         });
     } catch (ex) {
         console.log(ex);
