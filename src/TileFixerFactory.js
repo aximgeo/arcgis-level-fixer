@@ -1,7 +1,6 @@
 var https = require('https'),
     http = require('http'),
     url = require('url'),
-    config = require('../config.json'),
     UncachedFixer = require('./UncachedFixer.js').UncachedFixer,
     ZoomLevelFixer = require('./ZoomLevelFixer.js').ZoomLevelFixer;
 
