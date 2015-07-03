@@ -22,7 +22,6 @@ exports.setup = function (app) {
         }
       });
     });
-    app.get('/examine', arcGISController.getRedirectUrl.bind(arcGISController));
-    app.get('/fix-n-serve/*', arcGISController.fixAndServe.bind(arcGISController));
-    app.get('*', arcGISController.performRedirectUrl.bind(arcGISController));
+    app.get('/examine', arcGISController.getProxyUrl.bind(arcGISController));
+    app.get('*', arcGISController.performProxy.bind(arcGISController));
 };

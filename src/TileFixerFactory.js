@@ -3,8 +3,7 @@ var https = require('https'),
     url = require('url'),
     config = require('../config.json'),
     UncachedFixer = require('./UncachedFixer.js').UncachedFixer,
-    ZoomLevelFixer = require('./ZoomLevelFixer.js').ZoomLevelFixer,
-    OffsetOriginFixer = require('./OffsetOriginFixer.js').OffsetOriginFixer;
+    ZoomLevelFixer = require('./ZoomLevelFixer.js').ZoomLevelFixer;
 
 exports.TileFixerFactory = function() {
     "use strict";
@@ -18,13 +17,8 @@ exports.TileFixerFactory.createTileMapper = function (url, callback) {
         }
 
         if (data != null && data.tileInfo != null && data.tileInfo.lods != null) {
-            if(data.tileInfo.origin.x !== config.correctOrigin.x || data.tileInfo.origin.y !== config.correctOrigin.y) {
-                //create origin offset fixer
-                callback(undefined, new OffsetOriginFixer(url, data.tileInfo));
-            } else {
-                //create ZoomLevelFixer
-                callback(undefined, new ZoomLevelFixer(url, data.tileInfo));
-            }
+            //create ZoomLevelFixer
+            callback(undefined, new ZoomLevelFixer(url, data.tileInfo));
         } else if (data != null && data.currentVersion != null){
             // create UncachedFixer
             callback(undefined, new UncachedFixer(url));

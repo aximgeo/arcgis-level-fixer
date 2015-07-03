@@ -5,15 +5,15 @@ exports.UncachedFixer = function(url) {
     this.url = url;
 };
 
-exports.UncachedFixer.prototype.getRedirectData = function (protocol, host, urlPart) {
+exports.UncachedFixer.prototype.getProxyUrl = function (protocol, host, urlPart) {
     "use strict";
     return {
         "alf":protocol + "://" + host + "/" + urlPart + "/arcgis/z/{z}/y/{y}/x/{x}"
     };
 };
 
-exports.UncachedFixer.prototype.getRedirectUrl = function (baseUrl, queryParams, x, y, z) {
+exports.UncachedFixer.prototype.getFixedTile = function (baseUrl, queryParams, x, y, z, callback) {
     "use strict";
     var tiler = new TileifyAGS(queryParams);
-    return tiler.getTileUrl(baseUrl, x, y, z);
+    return callback(undefined, tiler.getTileUrl(baseUrl, x, y, z));
 };
