@@ -17,5 +17,5 @@ exports.UncachedFixer.prototype.getProxyUrl = function (protocol, host, urlPart)
 exports.UncachedFixer.prototype.getFixedTile = function (baseUrl, queryParams, x, y, z, callback) {
     "use strict";
     var tiler = new TileifyAGS(queryParams);
-    return callback(undefined, tiler.getTileUrl(baseUrl, x, y, z));
+    return callback(undefined, {'redirect':tiler.getTileUrl(baseUrl, x, y, z)});
 };
