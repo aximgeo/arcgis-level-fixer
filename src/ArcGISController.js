@@ -45,7 +45,10 @@ exports.ArcGISController.prototype.getProxyUrl = function (req, res) {
                 return;
             }
 
-            res.json(fixer.getProxyUrl(req.protocol, req.headers.host, mapserverUrl));
+            var alfProxy = fixer.getProxyUrl(req.protocol, req.headers.host, mapserverUrl);
+
+            console.log(alfProxy);
+            res.json(alfProxy);
         });
     } catch (ex) {
         console.log(ex);
@@ -89,8 +92,8 @@ exports.ArcGISController.prototype.performProxy = function (req, res) {
                 if(fixResults.tile != null) {
                     res.writeHead(200, {'Content-Type': 'image/png' });
                     res.end(fixResults.tile, 'binary');
-                } else if (fixResults.redirectUrl != null) {
-                    res.redirect(fixResults.redirectUrl);
+                } else if (fixResults.redirect != null) {
+                    res.redirect(fixResults.redirect);
                 } else {
                     res.status(404).send("The requested tile is not available");
                 }

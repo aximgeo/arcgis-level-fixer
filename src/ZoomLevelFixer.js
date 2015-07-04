@@ -6,11 +6,12 @@ var config = require('../config.json'),
     http = require('http'),
     Stream = require('stream').Transform;
 
-exports.ZoomLevelFixer = function(url, tileinfo) {
+exports.ZoomLevelFixer = function(url, tileinfo, center) {
     "use strict";
     this.url = url;
     this.lodMapper = {};
     this.tileinfo = tileinfo;
+    this.center = center;
 
     //create the zoom level data
     var arcgisLODs = this.tileinfo.lods;
@@ -32,7 +33,8 @@ exports.ZoomLevelFixer.prototype.getProxyUrl = function (protocol, host, urlPart
     "use strict";
     return {
         "alf":protocol + "://" + host + "/" + urlPart + "/arcgis/z/{z}/y/{y}/x/{x}",
-        "lods":this.getValidLODs()
+        "lods":this.getValidLODs(),
+        "center":this.center
     };
 };
 
@@ -46,8 +48,10 @@ exports.ZoomLevelFixer.prototype.getFixedTile = function (baseUrl, queryParams, 
 
     if(this.withinPercentage(this.tileinfo.origin.x, config.correctOrigin.x, allowedResolutionError) &&
         this.withinPercentage(this.tileinfo.origin.y, config.correctOrigin.y, allowedResolutionError)) {
-        return callback(undefined, {"redirect":baseUrl + "/tile/"+z+"/"+y+"/"+x});
+        console.log("REDIRECT");
+        return callback(undefined, {"redirect":baseUrl + "/tile/"+adjustedZ+"/"+y+"/"+x});
     } else {
+        console.log("NEW TILE");
         var tileWidth = this.tileinfo.cols, 
             tileHeight = this.tileinfo.rows;
 
