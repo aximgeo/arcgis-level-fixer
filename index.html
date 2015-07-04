@@ -3,6 +3,9 @@
 <head>
     <title>ALF - I accept cats as payment</title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <!-- Load Leaflet from CDN-->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <style>
         html {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -77,6 +80,10 @@
             background-size: cover;
         }
 
+        #map {
+            height:200px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -95,17 +102,73 @@
             <strong>ALF</strong> serves redirect URLs to align published <strong>Level of Details (LODs)</strong> for ArcServer tiled services and <strong>tileify's ArcGIS non-tiled</strong> services
             <br>
             <br>
-            <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer">
+            <input style="width:1000px; height:50px; font-size:20px; text-align: center" type="text" id="inputtext" placeholder="http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer" value="http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_2015/MapServer">
             <br>
             <br>
             <input type="button" value="FEED ME"id="submit" style="width:125px; height:40px; font-size:20px; font-weight: bold;" ><img id="spinner" style="display:none" src="http://33.media.tumblr.com/0ed004e88fb1ac332f3466e98c2d0636/tumblr_mu0qqq3ZSr1roa1xxo1_400.gif"/>
         </div>
         <div id="response" class="response">
         </div>
+        <div id="example">
+            <br>
+            <h2>Example</h2>
+            <div id="map"></div>
+
+<!-- HTML generated using hilite.me --><div style="text-align:left;background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #1e90ff; font-weight: bold">&lt;html&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;head&gt;</span>
+        <span style="color: #1e90ff; font-weight: bold">&lt;link</span> <span style="color: #1e90ff">rel=</span><span style="color: #aa5500">&quot;stylesheet&quot;</span> <span style="color: #1e90ff">href=</span><span style="color: #aa5500">&quot;http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css&quot;</span> <span style="color: #1e90ff; font-weight: bold">/&gt;</span>
+        <span style="color: #1e90ff; font-weight: bold">&lt;script </span><span style="color: #1e90ff">src=</span><span style="color: #aa5500">&quot;http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js&quot;</span><span style="color: #1e90ff; font-weight: bold">&gt;&lt;/script&gt;</span>
+        <span style="color: #1e90ff; font-weight: bold">&lt;style&gt;</span>
+            <span style="color: #00aa00; text-decoration: underline">#map</span> {
+                <span style="color: #0000aa">height</span>:<span style="color: #009999">200px</span>;
+                <span style="color: #0000aa">width</span>:<span style="color: #009999">100</span>%;
+            }
+        <span style="color: #1e90ff; font-weight: bold">&lt;/style&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;/head&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;body&gt;</span>
+        <span style="color: #1e90ff; font-weight: bold">&lt;div</span> <span style="color: #1e90ff">id=</span><span style="color: #aa5500">&quot;map&quot;</span><span style="color: #1e90ff; font-weight: bold">&gt;&lt;/div&gt;</span>
+        <span style="color: #1e90ff; font-weight: bold">&lt;script&gt;</span>
+            <span style="color: #0000aa">var</span> map = L.map(<span style="color: #aa5500">&#39;map&#39;</span>).setView(<span style="color: #0000aa">new</span> L.LatLng(<span style="color: #009999" id="lat">34</span>, -<span style="color: #009999" id="lng">75</span>), <span style="color: #009999" id="zoomLOD">10</span>);;
+            L.tileLayer(<span style="color: #aa5500">&#39;<span id="exampleUrl">tile-url</span>&#39;</span>, {
+                attribution: <span style="color: #aa5500">&#39;&lt;a href=&quot;https://github.com/gisinc/arcgis-level-fixer&quot;&gt;ALF&lt;/a&gt;&#39;</span>,
+                maxZoom: <span style="color: #009999" id="maxLOD">10</span>,
+                minZoom: <span style="color: #009999" id="minLOD">18</span>
+            }).addTo(map);
+        <span style="color: #1e90ff; font-weight: bold">&lt;/script&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;/body&gt;</span>
+<span style="color: #1e90ff; font-weight: bold">&lt;/html&gt;</span>
+</pre></td></tr></table></div>
+        </div>
     </div>
 </div>
 
 <script>
+    $("#example").hide();
+    var map = L.map('map');
+    var layer;
+
     var minDisplayTime = 2000, startTime;
     function startLoading() {
         $("#submit").hide();
@@ -115,13 +178,18 @@
         startTime = Date.now();
         
         $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+        $("#example").hide();
+        if(layer) map.removeLayer(layer);
     }
-    function stopLoading() {
+    function stopLoading(callback) {
         setTimeout(function() {
             $("#submit").show();
             $("#response").show();
             $("#spinner").hide();
             $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+            $("#example").show();
+            callback();
         }, Math.max(0, minDisplayTime - (startTime - Date.now())));
     }
     $("#inputtext").keyup(function(e){
@@ -141,17 +209,46 @@
             success: function(result){
                 $("#response").html(result);
                 var html = "<h2>Something's wrong with that cat...here's a new one:</h2><strong><a href='" + result.alf + "'>" + result.alf + "</a></strong>";
+                var firstLOD, lastLOD;
                 if(result.lods != null) {
                     html += "<br><br>";
                     html += "<table style='margin: 0 auto; border: 1;'><tr><th>Original LOD</th><th>&nbsp;</th><th>Fixed LOD</th></tr>";
                     for (var lodOSM in result.lods) {
                         html += "<tr><td>" + result.lods[lodOSM] + "</td><td>now maps to</td><td>" + lodOSM + "</td></tr>";
+
+                        if(!firstLOD) {
+                            firstLOD = lodOSM;
+                        }
+                        lastLOD = lodOSM;
                     }
                     html += "</table>";
                 }
 
+                firstLOD = firstLOD || 10;
+                lastLOD = lastLOD || 18;
+
                 $("#response").html(html);
-                stopLoading();
+
+                L.tileLayer(result.alf, {
+                    attribution: '<a href="https://github.com/gisinc/arcgis-level-fixer">ALF</a>',
+                    maxZoom: lastLOD,
+                    minZoom: firstLOD
+                }).addTo(map);
+                var point = new L.Point(result.center.x, result.center.y); // Lon/Lat
+                var earthRadius = 6378137;
+                var latlng = L.Projection.SphericalMercator.unproject(point.divideBy(earthRadius));
+                
+                //setup example
+                $("#exampleUrl").html(result.alf);
+                $("#maxLOD").html(lastLOD);
+                $("#minLOD").html(firstLOD);
+                $("#zoomLOD").html(firstLOD);
+                $("#lat").html(latlng.lat);
+                $("#lon").html(latlng.lng);
+
+                stopLoading(function() {
+                    map.setView(new L.LatLng(latlng.lat, latlng.lng), firstLOD);
+                });
             },
             error: function(result) {
                 $("#response").html("<h2>This doesn't taste like a cat...it should look like this:</h2><strong><a href='http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer'>http://gismaps.vita.virginia.gov/arcgis/rest/services/MostRecentImagery/MostRecentImagery_WGS/MapServer</a></strong><br><br><h2>...or this:</h2><strong><a href='https://gismaps.vbgov.com/arcgisimage/rest/services/Imagery/Accuplus2013/ImageServer'>https://gismaps.vbgov.com/arcgisimage/rest/services/Imagery/Accuplus2013/ImageServer</a></strong>");

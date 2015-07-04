@@ -14,13 +14,17 @@ exports.TileFixerFactory.createTileMapper = function (url, callback) {
         if(err) {
             return callback(err);
         }
+        var center = {
+            "x":(data.initialExtent.xmin + data.initialExtent.xmax)/2,
+            "y":(data.initialExtent.ymin + data.initialExtent.ymax)/2
+        };
 
         if (data != null && data.tileInfo != null && data.tileInfo.lods != null) {
             //create ZoomLevelFixer
-            callback(undefined, new ZoomLevelFixer(url, data.tileInfo));
+            callback(undefined, new ZoomLevelFixer(url, data.tileInfo, center));
         } else if (data != null && data.currentVersion != null){
             // create UncachedFixer
-            callback(undefined, new UncachedFixer(url));
+            callback(undefined, new UncachedFixer(url, center));
         } else {
             callback(new Error("Unsupported URL"));
         }
