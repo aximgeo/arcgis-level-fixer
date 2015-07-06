@@ -1,5 +1,4 @@
-var TileFixerFactory = require('./TileFixerFactory.js').TileFixerFactory,
-    url = require('url');
+var TileFixerFactory = require('./TileFixerFactory.js').TileFixerFactory;
 
 exports.ArcGISController = function() {
     "use strict";
@@ -20,7 +19,7 @@ exports.ArcGISController = function() {
 exports.ArcGISController.prototype.getTileFixer = function (url, callback) {
     "use strict";
     var self = this;
-    var cachedFixer = this.TileFixerCache[url]
+    var cachedFixer = this.TileFixerCache[url];
     if(cachedFixer != null){
         return callback(undefined, this.TileFixerCache[url]);
     } else {
@@ -35,7 +34,7 @@ exports.ArcGISController.prototype.getTileFixer = function (url, callback) {
     }
 };
 
-exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
+exports.ArcGISController.prototype.getProxyUrl = function (req, res) {
     "use strict";
     try {
         var mapserverUrl = req.query.url;
@@ -46,7 +45,10 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
                 return;
             }
 
-            res.json(fixer.getRedirectData(req.protocol, req.headers.host, mapserverUrl));
+            var alfProxy = fixer.getProxyUrl(req.protocol, req.headers.host, mapserverUrl);
+
+            console.log(alfProxy);
+            res.json(alfProxy);
         });
     } catch (ex) {
         console.log(ex);
@@ -54,7 +56,7 @@ exports.ArcGISController.prototype.getRedirectUrl = function (req, res) {
     }
 };
 
-exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
+exports.ArcGISController.prototype.performProxy = function (req, res) {
     "use strict";
 
     try {
@@ -82,12 +84,20 @@ exports.ArcGISController.prototype.performRedirectUrl = function (req, res) {
                 res.status(500).send(err.message);
                 return;
             }
-            var redirectUrl = fixer.getRedirectUrl(baseUrl, queryParams, x, y, z);
-            if(redirectUrl == null) {
-                res.status(404).send("The requested tile is not available");
-                return;
-            }
-            res.redirect(redirectUrl);
+            fixer.getFixedTile(baseUrl, queryParams, x, y, z, function(err, fixResults){
+                if(fixResults == null) {
+                    res.status(404).send("The requested tile is not available");
+                    return;
+                }
+                if(fixResults.tile != null) {
+                    res.writeHead(200, {'Content-Type': 'image/png' });
+                    res.end(fixResults.tile, 'binary');
+                } else if (fixResults.redirect != null) {
+                    res.redirect(fixResults.redirect);
+                } else {
+                    res.status(404).send("The requested tile is not available");
+                }
+            });
         });
     } catch (ex) {
         console.log(ex);
