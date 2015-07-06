@@ -1,10 +1,10 @@
 /*!
-ArcGIS Level Fixer v--3d8d678
+ArcGIS Level Fixer v0.3.2-4-b4bd5b5
 Copyright 2014 Geographic Information Services, Inc 
 ALF uses third-party libraries which remain the property of their respective authors.
 */
 
-var https = require("https"), http = require("http"), url = require("url"), config = require("../config.json"), UncachedFixer = require("./UncachedFixer.js").UncachedFixer, ZoomLevelFixer = require("./ZoomLevelFixer.js").ZoomLevelFixer;
+var https = require("https"), http = require("http"), url = require("url"), UncachedFixer = require("./UncachedFixer.js").UncachedFixer, ZoomLevelFixer = require("./ZoomLevelFixer.js").ZoomLevelFixer;
 
 exports.TileFixerFactory = function() {
     "use strict";
@@ -16,10 +16,14 @@ exports.TileFixerFactory.createTileMapper = function(url, callback) {
         if (err) {
             return callback(err);
         }
+        var center = {
+            x: (data.initialExtent.xmin + data.initialExtent.xmax) / 2,
+            y: (data.initialExtent.ymin + data.initialExtent.ymax) / 2
+        };
         if (data != null && data.tileInfo != null && data.tileInfo.lods != null) {
-            callback(undefined, new ZoomLevelFixer(url, data.tileInfo));
+            callback(undefined, new ZoomLevelFixer(url, data.tileInfo, center));
         } else if (data != null && data.currentVersion != null) {
-            callback(undefined, new UncachedFixer(url));
+            callback(undefined, new UncachedFixer(url, center));
         } else {
             callback(new Error("Unsupported URL"));
         }

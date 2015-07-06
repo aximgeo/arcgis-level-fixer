@@ -1,5 +1,5 @@
 /*!
-ArcGIS Level Fixer v--3d8d678
+ArcGIS Level Fixer v0.3.2-4-b4bd5b5
 Copyright 2014 Geographic Information Services, Inc 
 ALF uses third-party libraries which remain the property of their respective authors.
 */

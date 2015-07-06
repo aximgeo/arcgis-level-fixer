@@ -1,10 +1,10 @@
 /*!
-ArcGIS Level Fixer v--3d8d678
+ArcGIS Level Fixer v0.3.2-4-b4bd5b5
 Copyright 2014 Geographic Information Services, Inc 
 ALF uses third-party libraries which remain the property of their respective authors.
 */
 
-var TileFixerFactory = require("./TileFixerFactory.js").TileFixerFactory, url = require("url");
+var TileFixerFactory = require("./TileFixerFactory.js").TileFixerFactory;
 
 exports.ArcGISController = function() {
     "use strict";
@@ -38,7 +38,7 @@ exports.ArcGISController.prototype.getTileFixer = function(url, callback) {
     }
 };
 
-exports.ArcGISController.prototype.getRedirectUrl = function(req, res) {
+exports.ArcGISController.prototype.getProxyUrl = function(req, res) {
     "use strict";
     try {
         var mapserverUrl = req.query.url;
@@ -47,7 +47,9 @@ exports.ArcGISController.prototype.getRedirectUrl = function(req, res) {
                 res.status(500).send("this doesn't taste like a cat.");
                 return;
             }
-            res.json(fixer.getRedirectData(req.protocol, req.headers.host, mapserverUrl));
+            var alfProxy = fixer.getProxyUrl(req.protocol, req.headers.host, mapserverUrl);
+            console.log(alfProxy);
+            res.json(alfProxy);
         });
     } catch (ex) {
         console.log(ex);
@@ -55,7 +57,7 @@ exports.ArcGISController.prototype.getRedirectUrl = function(req, res) {
     }
 };
 
-exports.ArcGISController.prototype.performRedirectUrl = function(req, res) {
+exports.ArcGISController.prototype.performProxy = function(req, res) {
     "use strict";
     try {
         console.log(req.url);
@@ -70,12 +72,22 @@ exports.ArcGISController.prototype.performRedirectUrl = function(req, res) {
                 res.status(500).send(err.message);
                 return;
             }
-            var redirectUrl = fixer.getRedirectUrl(baseUrl, queryParams, x, y, z);
-            if (redirectUrl == null) {
-                res.status(404).send("The requested tile is not available");
-                return;
-            }
-            res.redirect(redirectUrl);
+            fixer.getFixedTile(baseUrl, queryParams, x, y, z, function(err, fixResults) {
+                if (fixResults == null) {
+                    res.status(404).send("The requested tile is not available");
+                    return;
+                }
+                if (fixResults.tile != null) {
+                    res.writeHead(200, {
+                        "Content-Type": "image/png"
+                    });
+                    res.end(fixResults.tile, "binary");
+                } else if (fixResults.redirect != null) {
+                    res.redirect(fixResults.redirect);
+                } else {
+                    res.status(404).send("The requested tile is not available");
+                }
+            });
         });
     } catch (ex) {
         console.log(ex);
