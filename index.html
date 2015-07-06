@@ -205,7 +205,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/examine?url=" + dataString,
+            url: "http://arcgis-level-fixer.elasticbeanstalk.com//examine?url=" + dataString,
             success: function(result){
                 $("#response").html(result);
                 var html = "<h2>Something's wrong with that cat...here's a new one:</h2><strong><a href='" + result.alf + "'>" + result.alf + "</a></strong>";
@@ -258,5 +258,22 @@
     });
 </script>
     <a href="https://github.com/gisinc/arcgis-level-fixer"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+    <!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=10357036; 
+var sc_invisible=1; 
+var sc_security="6aca6033"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="web statistics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/10357036/0/6aca6033/1/"
+alt="web statistics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
 </body>
 </html>
